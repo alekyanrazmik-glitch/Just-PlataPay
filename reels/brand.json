@@ -1,0 +1,9 @@
+{
+  "prefix": "Just",
+  "name": "PlataPay",
+  "handle": "@justplatapay",
+  "theme": {
+    "accent": "#2BE08C",
+    "accent-2": "#7A5CFF"
+  }
+}

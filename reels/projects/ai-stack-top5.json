@@ -1,0 +1,37 @@
+{
+  "id": "ai-stack-top5",
+  "name": "Топ-5 AI-подписок",
+  "fps": 30,
+  "scenes": [
+    {
+      "type": "hook",
+      "duration": 2.5,
+      "kicker": "топ-5",
+      "size": "small",
+      "title": "AI-подписки,|которые берут|*чаще всего*",
+      "sub": "Подборка по заявкам за последний месяц."
+    },
+    {
+      "type": "list",
+      "duration": 6.6,
+      "title": "Что оплачивают|для работы",
+      "items": [
+        { "logo": "GPT", "name": "ChatGPT Plus", "note": "тексты, код, разбор документов" },
+        { "logo": "Claude", "name": "Claude Pro", "note": "длинные тексты и аналитика" },
+        { "logo": "Midjournei", "name": "Midjourney", "note": "картинки для контента" },
+        { "logo": "Cursor", "name": "Cursor Pro", "note": "разработка с ИИ" },
+        { "logo": "ElevenLabs", "name": "ElevenLabs", "note": "озвучка и дубляж" }
+      ]
+    },
+    {
+      "type": "cta",
+      "duration": 3.4,
+      "title": "Соберём *весь стек*|одним платежом",
+      "sub": "Оплачиваем любой из них — и ещё 95 сервисов."
+    }
+  ],
+  "post": {
+    "caption": "Топ-5 AI-подписок, которые у нас просят оплатить чаще всего:\n\n1. ChatGPT Plus\n2. Claude Pro\n3. Midjourney\n4. Cursor Pro\n5. ElevenLabs\n\nВсе пять оплачиваются на твой аккаунт. Можно одним платежом, можно по одному.\n\nЧто из этого используешь? Пиши в комментариях.",
+    "hashtags": ["#нейросети", "#chatgpt", "#midjourney", "#claude", "#cursor", "#оплатаподписок", "#platapay"]
+  }
+}

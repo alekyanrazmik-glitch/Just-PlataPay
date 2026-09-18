@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Just PlataPay — предпросмотр риллс</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    min-height: 100vh;
+    display: flex;
+    gap: 28px;
+    padding: 28px;
+    background: #0b0c10;
+    color: #e9ecf3;
+    font: 15px/1.45 ui-sans-serif, system-ui, 'Liberation Sans', sans-serif;
+  }
+  .phone {
+    position: relative;
+    width: 405px;
+    height: 720px;
+    flex: none;
+    border-radius: 34px;
+    overflow: hidden;
+    box-shadow: 0 30px 90px -30px #000, 0 0 0 1px #23262f;
+    background: #000;
+  }
+  iframe {
+    width: 1080px;
+    height: 1920px;
+    border: 0;
+    transform: scale(0.375);
+    transform-origin: top left;
+  }
+  aside { flex: 1; max-width: 520px; display: flex; flex-direction: column; gap: 18px; }
+  h1 { font-size: 20px; letter-spacing: -0.02em; }
+  .muted { color: #8d94a5; font-size: 13px; }
+  select, button {
+    font: inherit;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid #2a2e3a;
+    background: #14161d;
+    color: inherit;
+    cursor: pointer;
+  }
+  button.primary { background: #2be08c; color: #06210f; border-color: transparent; font-weight: 700; }
+  .row { display: flex; gap: 10px; align-items: center; }
+  input[type=range] { flex: 1; accent-color: #2be08c; }
+  code { background: #14161d; padding: 2px 6px; border-radius: 6px; font-size: 12px; }
+  label.check { display: flex; gap: 8px; align-items: center; cursor: pointer; font-size: 13px; color: #8d94a5; }
+</style>
+</head>
+<body>
+  <div class="phone"><iframe id="frame" src="src/reel.html?project=services-100"></iframe></div>
+  <aside>
+    <h1>Предпросмотр риллс</h1>
+    <p class="muted">Кадр в кадр то, что отрендерит <code>npm run render</code>. Полотно 1080×1920, 30 fps.</p>
+    <div class="row">
+      <select id="project"></select>
+      <button class="primary" id="play">▶ Играть</button>
+    </div>
+    <div class="row">
+      <input type="range" id="scrub" min="0" max="1000" value="0">
+      <span id="time" class="muted" style="width:86px;text-align:right">0.00 / 0.00</span>
+    </div>
+    <label class="check"><input type="checkbox" id="safe"> показать зоны, перекрытые интерфейсом соцсети</label>
+    <p class="muted">Рендер в MP4: <code>npm run render -- --project=имя</code></p>
+  </aside>
+
+<script>
+const FALLBACK = ['services-100', 'card-declined', 'ai-stack-top5', 'how-it-works'];
+const frame = document.getElementById('frame');
+const select = document.getElementById('project');
+const scrub = document.getElementById('scrub');
+const time = document.getElementById('time');
+const play = document.getElementById('play');
+const safe = document.getElementById('safe');
+
+// The dev server lists the projects folder; any other static server falls back.
+fetch('projects/index.json')
+  .then((r) => (r.ok ? r.json() : FALLBACK))
+  .catch(() => FALLBACK)
+  .then((names) => {
+    select.innerHTML = '';
+    for (const name of names) {
+      const opt = document.createElement('option');
+      opt.value = opt.textContent = name;
+      select.appendChild(opt);
+    }
+    select.value = new URLSearchParams(location.search).get('project') || names[0];
+    frame.src = `src/reel.html?project=${select.value}`;
+  });
+
+let playing = false;
+let t = 0;
+let last = 0;
+
+const reel = () => frame.contentWindow && frame.contentWindow.REEL;
+
+function render() {
+  const r = reel();
+  if (!r) return;
+  r.seek(t);
+  scrub.value = (t / r.duration) * 1000;
+  time.textContent = `${t.toFixed(2)} / ${r.duration.toFixed(2)}`;
+}
+
+function tick(now) {
+  if (playing) {
+    const dt = last ? (now - last) / 1000 : 0;
+    last = now;
+    const r = reel();
+    if (r) { t = (t + dt) % r.duration; render(); }
+  } else {
+    last = 0;
+  }
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+
+select.onchange = () => { t = 0; playing = false; play.textContent = '▶ Играть'; frame.src = `src/reel.html?project=${select.value}`; };
+play.onclick = () => { playing = !playing; play.textContent = playing ? '❚❚ Пауза' : '▶ Играть'; };
+scrub.oninput = () => { playing = false; play.textContent = '▶ Играть'; const r = reel(); if (r) { t = (scrub.value / 1000) * r.duration; render(); } };
+safe.onchange = () => frame.contentDocument.body.classList.toggle('show-safe', safe.checked);
+// The stage boots asynchronously (fonts, logo decode), so wait for REEL.
+frame.onload = () => {
+  t = 0;
+  const wait = setInterval(() => {
+    if (!reel()) return;
+    clearInterval(wait);
+    render();
+  }, 100);
+  setTimeout(() => clearInterval(wait), 20000);
+};
+</script>
+</body>
+</html>

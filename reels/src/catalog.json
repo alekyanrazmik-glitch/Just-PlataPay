@@ -1,0 +1,1289 @@
+[
+ {
+  "id": "Ableton",
+  "file": "Ableton.PNG",
+  "color": "#8A93A6",
+  "lum": 0.0,
+  "trim": {
+   "x": 0.045,
+   "y": 0.2242,
+   "w": 0.91,
+   "h": 0.547,
+   "ratio": 2.072
+  }
+ },
+ {
+  "id": "Adobe After Effects",
+  "file": "Adobe After Effects.PNG",
+  "color": "#0505D0",
+  "lum": 0.124,
+  "trim": {
+   "x": 0.0,
+   "y": 0.0,
+   "w": 1.0,
+   "h": 1.0,
+   "ratio": 1.0256
+  }
+ },
+ {
+  "id": "Adobe Creative Cloud",
+  "file": "Adobe Creative Cloud.PNG",
+  "color": "#F84206",
+  "lum": 0.615,
+  "trim": {
+   "x": 0.0,
+   "y": 0.0,
+   "w": 1.0,
+   "h": 1.0,
+   "ratio": 1.0256
+  }
+ },
+ {
+  "id": "Adobe Firefly",
+  "file": "Adobe Firefly.PNG",
+  "color": "#F80606",
+  "lum": 0.366,
+  "trim": {
+   "x": 0.1217,
+   "y": 0.0288,
+   "w": 0.7555,
+   "h": 0.9409,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "Adobe Photoshop",
+  "file": "Adobe Photoshop.PNG",
+  "color": "#067FF8",
+  "lum": 0.169,
+  "trim": {
+   "x": 0.0,
+   "y": 0.0,
+   "w": 1.0,
+   "h": 1.0,
+   "ratio": 1.0256
+  }
+ },
+ {
+  "id": "Adobe Premiere Pro",
+  "file": "Adobe Premiere Pro.PNG",
+  "color": "#0505D0",
+  "lum": 0.104,
+  "trim": {
+   "x": 0.0,
+   "y": 0.0,
+   "w": 1.0,
+   "h": 1.0,
+   "ratio": 1.0256
+  }
+ },
+ {
+  "id": "Adobe",
+  "file": "Adobe.PNG",
+  "color": "#F80606",
+  "lum": 0.251,
+  "trim": {
+   "x": 0.1373,
+   "y": 0.0853,
+   "w": 0.7253,
+   "h": 0.8174,
+   "ratio": 1.1026
+  }
+ },
+ {
+  "id": "Agoda",
+  "file": "Agoda.PNG",
+  "color": "#F8BC06",
+  "lum": 0.452,
+  "trim": {
+   "x": 0.0231,
+   "y": 0.1955,
+   "w": 0.9538,
+   "h": 0.6061,
+   "ratio": 1.96
+  }
+ },
+ {
+  "id": "Airbnb",
+  "file": "Airbnb.PNG",
+  "color": "#FA5F5F",
+  "lum": 0.498,
+  "trim": {
+   "x": 0.1776,
+   "y": 0.0379,
+   "w": 0.691,
+   "h": 0.9242,
+   "ratio": 0.9311
+  }
+ },
+ {
+  "id": "Airtable",
+  "file": "Airtable.PNG",
+  "color": "#F8BC06",
+  "lum": 0.639,
+  "trim": {
+   "x": 0.0998,
+   "y": 0.0793,
+   "w": 0.8029,
+   "h": 0.8293,
+   "ratio": 1.1913
+  }
+ },
+ {
+  "id": "Alipay",
+  "file": "Alipay.PNG",
+  "color": "#06BCF8",
+  "lum": 0.517,
+  "trim": {
+   "x": 0.1326,
+   "y": 0.0424,
+   "w": 0.7348,
+   "h": 0.9152,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "App Store",
+  "file": "App Store.PNG",
+  "color": "#067FF8",
+  "lum": 0.599,
+  "trim": {
+   "x": 0.1387,
+   "y": 0.05,
+   "w": 0.7238,
+   "h": 0.9015,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "Artlist",
+  "file": "Artlist.PNG",
+  "color": "#F8BC06",
+  "lum": 0.095,
+  "trim": {
+   "x": 0.135,
+   "y": 0.0439,
+   "w": 0.7287,
+   "h": 0.9076,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "Bandcamp",
+  "file": "Bandcamp.PNG",
+  "color": "#1FAFDF",
+  "lum": 0.528,
+  "trim": {
+   "x": 0.0633,
+   "y": 0.1652,
+   "w": 0.8832,
+   "h": 0.647,
+   "ratio": 1.7002
+  }
+ },
+ {
+  "id": "Booking",
+  "file": "Booking.PNG",
+  "color": "#1A6BBB",
+  "lum": 0.307,
+  "trim": {
+   "x": 0.1411,
+   "y": 0.0379,
+   "w": 0.7579,
+   "h": 0.9242,
+   "ratio": 1.0213
+  }
+ },
+ {
+  "id": "Boosty",
+  "file": "Boosty.PNG",
+  "color": "#DF4F1F",
+  "lum": 0.507,
+  "trim": {
+   "x": 0.2433,
+   "y": 0.0455,
+   "w": 0.5827,
+   "h": 0.8727,
+   "ratio": 0.8316
+  }
+ },
+ {
+  "id": "Candy AI",
+  "file": "Candy AI.PNG",
+  "color": "#FA5F86",
+  "lum": 0.801,
+  "trim": {
+   "x": 0.2092,
+   "y": 0.1409,
+   "w": 0.5949,
+   "h": 0.7091,
+   "ratio": 1.0449
+  }
+ },
+ {
+  "id": "Canva",
+  "file": "Canva.PNG",
+  "color": "#06F8F8",
+  "lum": 0.534,
+  "trim": {
+   "x": 0.1265,
+   "y": 0.0364,
+   "w": 0.7482,
+   "h": 0.9273,
+   "ratio": 1.0049
+  }
+ },
+ {
+  "id": "CapCut",
+  "file": "CapCut.PNG",
+  "color": "#8A93A6",
+  "lum": 0.306,
+  "trim": {
+   "x": 0.0961,
+   "y": 0.0864,
+   "w": 0.8078,
+   "h": 0.8273,
+   "ratio": 1.2161
+  }
+ },
+ {
+  "id": "Claude",
+  "file": "Claude.PNG",
+  "color": "#DF4F1F",
+  "lum": 0.55,
+  "trim": {
+   "x": 0.1387,
+   "y": 0.0545,
+   "w": 0.7202,
+   "h": 0.897,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "Cloudflare",
+  "file": "Cloudflare.PNG",
+  "color": "#F87F06",
+  "lum": 0.631,
+  "trim": {
+   "x": 0.0506,
+   "y": 0.2425,
+   "w": 0.9,
+   "h": 0.5045,
+   "ratio": 2.2166
+  }
+ },
+ {
+  "id": "Codex",
+  "file": "Codex.PNG",
+  "color": "#5F86FA",
+  "lum": 0.822,
+  "trim": {
+   "x": 0.1119,
+   "y": 0.0167,
+   "w": 0.7786,
+   "h": 0.9697,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "Coursera",
+  "file": "Coursera.PNG",
+  "color": "#067FF8",
+  "lum": 0.468,
+  "trim": {
+   "x": 0.1253,
+   "y": 0.0333,
+   "w": 0.7506,
+   "h": 0.9348,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "Cults 3D",
+  "file": "Cults 3D.PNG",
+  "color": "#7F06F8",
+  "lum": 0.312,
+  "trim": {
+   "x": 0.1071,
+   "y": 0.0288,
+   "w": 0.7835,
+   "h": 0.9379,
+   "ratio": 1.0404
+  }
+ },
+ {
+  "id": "Cursor",
+  "file": "Cursor.PNG",
+  "color": "#8A93A6",
+  "lum": 0.648,
+  "trim": {
+   "x": 0.1752,
+   "y": 0.024,
+   "w": 0.6484,
+   "h": 0.9401,
+   "ratio": 0.8487
+  }
+ },
+ {
+  "id": "DeepL",
+  "file": "DeepL.PNG",
+  "color": "#1A6BBB",
+  "lum": 0.214,
+  "trim": {
+   "x": 0.2117,
+   "y": 0.05,
+   "w": 0.5754,
+   "h": 0.8955,
+   "ratio": 0.8003
+  }
+ },
+ {
+  "id": "Discord",
+  "file": "Discord.PNG",
+  "color": "#5F5FFA",
+  "lum": 0.422,
+  "trim": {
+   "x": 0.062,
+   "y": 0.0727,
+   "w": 0.8771,
+   "h": 0.85,
+   "ratio": 1.2852
+  }
+ },
+ {
+  "id": "Dropbox",
+  "file": "Dropbox.PNG",
+  "color": "#067FF8",
+  "lum": 0.423,
+  "trim": {
+   "x": 0.0827,
+   "y": 0.0167,
+   "w": 0.8345,
+   "h": 0.9667,
+   "ratio": 1.0752
+  }
+ },
+ {
+  "id": "Duolingo",
+  "file": "Duolingo.PNG",
+  "color": "#7FF806",
+  "lum": 0.688,
+  "trim": {
+   "x": 0.174,
+   "y": 0.047,
+   "w": 0.6533,
+   "h": 0.9076,
+   "ratio": 0.8965
+  }
+ },
+ {
+  "id": "ElevenLabs",
+  "file": "ElevenLabs.PNG",
+  "color": "#8A93A6",
+  "lum": 0.0,
+  "trim": {
+   "x": 0.1241,
+   "y": 0.0853,
+   "w": 0.753,
+   "h": 0.8159,
+   "ratio": 1.1468
+  }
+ },
+ {
+  "id": "Epidemic Sound",
+  "file": "Epidemic Sound.PNG",
+  "color": "#8A93A6",
+  "lum": 0.0,
+  "trim": {
+   "x": 0.1983,
+   "y": 0.0455,
+   "w": 0.601,
+   "h": 0.9076,
+   "ratio": 0.8247
+  }
+ },
+ {
+  "id": "Faceit",
+  "file": "Faceit.PNG",
+  "color": "#F84206",
+  "lum": 0.48,
+  "trim": {
+   "x": 0.0843,
+   "y": 0.1213,
+   "w": 0.7554,
+   "h": 0.741,
+   "ratio": 1.2667
+  }
+ },
+ {
+  "id": "Fansly",
+  "file": "Fansly.PNG",
+  "color": "#067FF8",
+  "lum": 0.534,
+  "trim": {
+   "x": 0.0791,
+   "y": 0.0591,
+   "w": 0.8552,
+   "h": 0.8833,
+   "ratio": 1.2058
+  }
+ },
+ {
+  "id": "Figma",
+  "file": "Figma.PNG",
+  "color": "#FA5F5F",
+  "lum": 0.538,
+  "trim": {
+   "x": 0.2494,
+   "y": 0.0318,
+   "w": 0.5012,
+   "h": 0.9364,
+   "ratio": 0.6667
+  }
+ },
+ {
+  "id": "FlutterFlow",
+  "file": "FlutterFlow.PNG",
+  "color": "#0606F8",
+  "lum": 0.301,
+  "trim": {
+   "x": 0.2094,
+   "y": 0.0674,
+   "w": 0.6804,
+   "h": 0.8548,
+   "ratio": 0.9842
+  }
+ },
+ {
+  "id": "Freepik",
+  "file": "Freepik.PNG",
+  "color": "#1F4FDF",
+  "lum": 0.564,
+  "trim": {
+   "x": 0.1326,
+   "y": 0.0424,
+   "w": 0.736,
+   "h": 0.9167,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "GPT",
+  "file": "GPT.PNG",
+  "color": "#8A93A6",
+  "lum": 0.0,
+  "trim": {
+   "x": 0.1398,
+   "y": 0.0404,
+   "w": 0.7205,
+   "h": 0.9072,
+   "ratio": 0.9868
+  }
+ },
+ {
+  "id": "Gamma App",
+  "file": "Gamma App.PNG",
+  "color": "#FA865F",
+  "lum": 0.362,
+  "trim": {
+   "x": 0.1606,
+   "y": 0.015,
+   "w": 0.674,
+   "h": 0.9551,
+   "ratio": 0.8683
+  }
+ },
+ {
+  "id": "Gemini (Google AI)",
+  "file": "Gemini (Google AI).PNG",
+  "color": "#067FF8",
+  "lum": 0.567,
+  "trim": {
+   "x": 0.146,
+   "y": 0.0329,
+   "w": 0.7518,
+   "h": 0.9251,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "GitHub Copilot",
+  "file": "GitHub Copilot.PNG",
+  "color": "#8A93A6",
+  "lum": 0.0,
+  "trim": {
+   "x": 0.1314,
+   "y": 0.1273,
+   "w": 0.7372,
+   "h": 0.7455,
+   "ratio": 1.2317
+  }
+ },
+ {
+  "id": "Gling",
+  "file": "Gling.PNG",
+  "color": "#8A93A6",
+  "lum": 0.012,
+  "trim": {
+   "x": 0.0759,
+   "y": 0.2485,
+   "w": 0.8373,
+   "h": 0.4864,
+   "ratio": 2.1651
+  }
+ },
+ {
+  "id": "Google BigQuery",
+  "file": "Google BigQuery.PNG",
+  "color": "#0642F8",
+  "lum": 0.534,
+  "trim": {
+   "x": 0.1156,
+   "y": 0.0359,
+   "w": 0.7689,
+   "h": 0.9147,
+   "ratio": 1.0344
+  }
+ },
+ {
+  "id": "Google Cloud",
+  "file": "Google Cloud.PNG",
+  "color": "#067FF8",
+  "lum": 0.55,
+  "trim": {
+   "x": 0.073,
+   "y": 0.0712,
+   "w": 0.8552,
+   "h": 0.8576,
+   "ratio": 1.242
+  }
+ },
+ {
+  "id": "Google Drive",
+  "file": "Google Drive.PNG",
+  "color": "#067FF8",
+  "lum": 0.526,
+  "trim": {
+   "x": 0.0961,
+   "y": 0.05,
+   "w": 0.8078,
+   "h": 0.9,
+   "ratio": 1.1178
+  }
+ },
+ {
+  "id": "Google",
+  "file": "Google.PNG",
+  "color": "#3FBF5F",
+  "lum": 0.515,
+  "trim": {
+   "x": 0.1375,
+   "y": 0.0485,
+   "w": 0.7117,
+   "h": 0.9045,
+   "ratio": 0.9799
+  }
+ },
+ {
+  "id": "Grok",
+  "file": "Grok.PNG",
+  "color": "#8A93A6",
+  "lum": 0.0,
+  "trim": {
+   "x": 0.1095,
+   "y": 0.0273,
+   "w": 0.7908,
+   "h": 0.9455,
+   "ratio": 1.0417
+  }
+ },
+ {
+  "id": "HeyGen",
+  "file": "HeyGen.PNG",
+  "color": "#06F8F8",
+  "lum": 0.724,
+  "trim": {
+   "x": 0.1922,
+   "y": 0.1153,
+   "w": 0.6168,
+   "h": 0.756,
+   "ratio": 1.004
+  }
+ },
+ {
+  "id": "Higgsfield AI",
+  "file": "Higgsfield AI.PNG",
+  "color": "#BCF806",
+  "lum": 0.732,
+  "trim": {
+   "x": 0.1058,
+   "y": 0.0091,
+   "w": 0.7883,
+   "h": 0.9789,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "Ideogram",
+  "file": "Ideogram.PNG",
+  "color": "#8A93A6",
+  "lum": 0.049,
+  "trim": {
+   "x": 0.1247,
+   "y": 0.0606,
+   "w": 0.7373,
+   "h": 0.8788,
+   "ratio": 1.05
+  }
+ },
+ {
+  "id": "Jira",
+  "file": "Jira.PNG",
+  "color": "#067FF8",
+  "lum": 0.477,
+  "trim": {
+   "x": 0.1557,
+   "y": 0.047,
+   "w": 0.6886,
+   "h": 0.9136,
+   "ratio": 0.9386
+  }
+ },
+ {
+  "id": "Kimi",
+  "file": "Kimi.PNG",
+  "color": "#067FF8",
+  "lum": 0.193,
+  "trim": {
+   "x": 0.1326,
+   "y": 0.0394,
+   "w": 0.736,
+   "h": 0.9167,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "Kits.ai",
+  "file": "Kits.ai.PNG",
+  "color": "#8A93A6",
+  "lum": 0.394,
+  "trim": {
+   "x": 0.1229,
+   "y": 0.0299,
+   "w": 0.7348,
+   "h": 0.9042,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "Kling Ai",
+  "file": "Kling Ai.PNG",
+  "color": "#8A93A6",
+  "lum": 0.0,
+  "trim": {
+   "x": 0.1411,
+   "y": 0.0455,
+   "w": 0.7202,
+   "h": 0.9106,
+   "ratio": 0.985
+  }
+ },
+ {
+  "id": "Ko-fi",
+  "file": "Ko-fi.PNG",
+  "color": "#F84206",
+  "lum": 0.676,
+  "trim": {
+   "x": 0.062,
+   "y": 0.0303,
+   "w": 0.938,
+   "h": 0.9409,
+   "ratio": 1.2415
+  }
+ },
+ {
+  "id": "Krea.ai",
+  "file": "Krea.ai.PNG",
+  "color": "#8A93A6",
+  "lum": 0.0,
+  "trim": {
+   "x": 0.2555,
+   "y": 0.0439,
+   "w": 0.4939,
+   "h": 0.9136,
+   "ratio": 0.6733
+  }
+ },
+ {
+  "id": "Lensa AI",
+  "file": "Lensa AI.PNG",
+  "color": "#8A93A6",
+  "lum": 0.289,
+  "trim": {
+   "x": 0.1496,
+   "y": 0.0727,
+   "w": 0.7007,
+   "h": 0.8773,
+   "ratio": 0.9948
+  }
+ },
+ {
+  "id": "Loom",
+  "file": "Loom.PNG",
+  "color": "#1F7FDF",
+  "lum": 0.474,
+  "trim": {
+   "x": 0.1338,
+   "y": 0.0439,
+   "w": 0.7336,
+   "h": 0.9136,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "Manus A",
+  "file": "Manus A.PNG",
+  "color": "#8A93A6",
+  "lum": 0.2,
+  "trim": {
+   "x": 0.2336,
+   "y": 0.0494,
+   "w": 0.562,
+   "h": 0.8952,
+   "ratio": 0.7726
+  }
+ },
+ {
+  "id": "Manychat",
+  "file": "Manychat.PNG",
+  "color": "#8A93A6",
+  "lum": 0.0,
+  "trim": {
+   "x": 0.1265,
+   "y": 0.1632,
+   "w": 0.7506,
+   "h": 0.6617,
+   "ratio": 1.3959
+  }
+ },
+ {
+  "id": "Maxon Cinema",
+  "file": "Maxon Cinema.PNG",
+  "color": "#DF1F1F",
+  "lum": 0.281,
+  "trim": {
+   "x": 0.1886,
+   "y": 0.0439,
+   "w": 0.6253,
+   "h": 0.9197,
+   "ratio": 0.8468
+  }
+ },
+ {
+  "id": "Microsoft",
+  "file": "Microsoft.PNG",
+  "color": "#06BCF8",
+  "lum": 0.592,
+  "trim": {
+   "x": 0.1375,
+   "y": 0.0485,
+   "w": 0.7263,
+   "h": 0.9045,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "Midjournei",
+  "file": "Midjournei.PNG",
+  "color": "#8A93A6",
+  "lum": 0.016,
+  "trim": {
+   "x": 0.0373,
+   "y": 0.0848,
+   "w": 0.9333,
+   "h": 0.7735,
+   "ratio": 1.1986
+  }
+ },
+ {
+  "id": "MiniMax",
+  "file": "MiniMax.PNG",
+  "color": "#DF1F4F",
+  "lum": 0.406,
+  "trim": {
+   "x": 0.0754,
+   "y": 0.0561,
+   "w": 0.8491,
+   "h": 0.8848,
+   "ratio": 1.1952
+  }
+ },
+ {
+  "id": "Miro",
+  "file": "Miro.PNG",
+  "color": "#F8BC06",
+  "lum": 0.652,
+  "trim": {
+   "x": 0.1363,
+   "y": 0.0439,
+   "w": 0.7299,
+   "h": 0.9091,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "MyHeritage",
+  "file": "MyHeritage.PNG",
+  "color": "#DF4F1F",
+  "lum": 0.604,
+  "trim": {
+   "x": 0.1253,
+   "y": 0.0303,
+   "w": 0.7506,
+   "h": 0.9348,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "Nintendo",
+  "file": "Nintendo.PNG",
+  "color": "#F80606",
+  "lum": 0.747,
+  "trim": {
+   "x": 0.1582,
+   "y": 0.0723,
+   "w": 0.6825,
+   "h": 0.8449,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "Notion",
+  "file": "Notion.PNG",
+  "color": "#8A93A6",
+  "lum": 0.455,
+  "trim": {
+   "x": 0.1387,
+   "y": 0.05,
+   "w": 0.6922,
+   "h": 0.9,
+   "ratio": 0.9579
+  }
+ },
+ {
+  "id": "OnlyFans",
+  "file": "OnlyFans.PNG",
+  "color": "#06BCF8",
+  "lum": 0.505,
+  "trim": {
+   "x": 0.0914,
+   "y": 0.0157,
+   "w": 0.8169,
+   "h": 0.969,
+   "ratio": 1.4988
+  }
+ },
+ {
+  "id": "OpenRouter",
+  "file": "OpenRouter.PNG",
+  "color": "#8A93A6",
+  "lum": 0.0,
+  "trim": {
+   "x": 0.0487,
+   "y": 0.0269,
+   "w": 0.9039,
+   "h": 0.9326,
+   "ratio": 1.1926
+  }
+ },
+ {
+  "id": "PS",
+  "file": "PS.PNG",
+  "color": "#06BCF8",
+  "lum": 0.558,
+  "trim": {
+   "x": 0.1934,
+   "y": 0.0225,
+   "w": 0.6131,
+   "h": 0.9431,
+   "ratio": 0.8
+  }
+ },
+ {
+  "id": "Patreon",
+  "file": "Patreon.PNG",
+  "color": "#F84206",
+  "lum": 0.666,
+  "trim": {
+   "x": 0.1302,
+   "y": 0.0394,
+   "w": 0.7409,
+   "h": 0.9227,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "PayPal",
+  "file": "PayPal.PNG",
+  "color": "#0538D0",
+  "lum": 0.237,
+  "trim": {
+   "x": 0.1946,
+   "y": 0.0318,
+   "w": 0.6107,
+   "h": 0.9364,
+   "ratio": 0.8123
+  }
+ },
+ {
+  "id": "Perplexity",
+  "file": "Perplexity.PNG",
+  "color": "#1ABBBB",
+  "lum": 0.438,
+  "trim": {
+   "x": 0.2105,
+   "y": 0.0394,
+   "w": 0.5779,
+   "h": 0.9212,
+   "ratio": 0.7812
+  }
+ },
+ {
+  "id": "Pika",
+  "file": "Pika.PNG",
+  "color": "#8A93A6",
+  "lum": 0.052,
+  "trim": {
+   "x": 0.0304,
+   "y": 0.3182,
+   "w": 0.9416,
+   "h": 0.3697,
+   "ratio": 3.1721
+  }
+ },
+ {
+  "id": "ProtonMail",
+  "file": "ProtonMail.PNG",
+  "color": "#865FFA",
+  "lum": 0.542,
+  "trim": {
+   "x": 0.1083,
+   "y": 0.103,
+   "w": 0.7859,
+   "h": 0.7848,
+   "ratio": 1.2471
+  }
+ },
+ {
+  "id": "Qwen",
+  "file": "Qwen.PNG",
+  "color": "#3F3FBF",
+  "lum": 0.654,
+  "trim": {
+   "x": 0.1253,
+   "y": 0.0404,
+   "w": 0.7567,
+   "h": 0.9192,
+   "ratio": 1.013
+  }
+ },
+ {
+  "id": "Shutterstock",
+  "file": "Shutterstock.PNG",
+  "color": "#F80606",
+  "lum": 0.286,
+  "trim": {
+   "x": 0.1253,
+   "y": 0.0329,
+   "w": 0.7506,
+   "h": 0.9237,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "Sora 2",
+  "file": "Sora 2.PNG",
+  "color": "#8A93A6",
+  "lum": 0.0,
+  "trim": {
+   "x": 0.1448,
+   "y": 0.0545,
+   "w": 0.7117,
+   "h": 0.8864,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "Splice",
+  "file": "Splice.PNG",
+  "color": "#8A93A6",
+  "lum": 0.0,
+  "trim": {
+   "x": 0.2251,
+   "y": 0.0167,
+   "w": 0.5511,
+   "h": 0.9621,
+   "ratio": 0.7134
+  }
+ },
+ {
+  "id": "Spotify",
+  "file": "Spotify.PNG",
+  "color": "#1FDF4F",
+  "lum": 0.533,
+  "trim": {
+   "x": 0.1241,
+   "y": 0.0288,
+   "w": 0.753,
+   "h": 0.9409,
+   "ratio": 0.9968
+  }
+ },
+ {
+  "id": "Stripe",
+  "file": "Stripe.PNG",
+  "color": "#7070EA",
+  "lum": 0.551,
+  "trim": {
+   "x": 0.1436,
+   "y": 0.0561,
+   "w": 0.7141,
+   "h": 0.8894,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "Suno AI",
+  "file": "Suno AI.PNG",
+  "color": "#8A93A6",
+  "lum": 0.0,
+  "trim": {
+   "x": 0.1253,
+   "y": 0.0329,
+   "w": 0.7506,
+   "h": 0.9237,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "Supabase",
+  "file": "Supabase.PNG",
+  "color": "#3FBF7F",
+  "lum": 0.627,
+  "trim": {
+   "x": 0.1715,
+   "y": 0.0318,
+   "w": 0.7263,
+   "h": 0.9318,
+   "ratio": 0.9707
+  }
+ },
+ {
+  "id": "Swift",
+  "file": "Swift.PNG",
+  "color": "#3F5FBF",
+  "lum": 0.38,
+  "trim": {
+   "x": 0.1326,
+   "y": 0.0258,
+   "w": 0.7348,
+   "h": 0.9485,
+   "ratio": 0.9649
+  }
+ },
+ {
+  "id": "Tiktoc",
+  "file": "Tiktoc.WEBP",
+  "color": "#06F8F8",
+  "lum": 0.248,
+  "trim": {
+   "x": 0.2492,
+   "y": 0.2092,
+   "w": 0.5025,
+   "h": 0.5817,
+   "ratio": 0.8639
+  }
+ },
+ {
+  "id": "TradingView",
+  "file": "TradingView.PNG",
+  "color": "#8A93A6",
+  "lum": 0.0,
+  "trim": {
+   "x": 0.0377,
+   "y": 0.2036,
+   "w": 0.9246,
+   "h": 0.5808,
+   "ratio": 1.9588
+  }
+ },
+ {
+  "id": "Twitch",
+  "file": "Twitch.PNG",
+  "color": "#5F3FBF",
+  "lum": 0.325,
+  "trim": {
+   "x": 0.184,
+   "y": 0.0439,
+   "w": 0.6973,
+   "h": 0.9091,
+   "ratio": 0.96
+  }
+ },
+ {
+  "id": "Udemy",
+  "file": "Udemy.PNG",
+  "color": "#7F1FDF",
+  "lum": 0.111,
+  "trim": {
+   "x": 0.3066,
+   "y": 0.0364,
+   "w": 0.3844,
+   "h": 0.9273,
+   "ratio": 0.5163
+  }
+ },
+ {
+  "id": "Weavy",
+  "file": "Weavy.PNG",
+  "color": "#8A93A6",
+  "lum": 0.01,
+  "trim": {
+   "x": 0.1144,
+   "y": 0.0826,
+   "w": 0.7798,
+   "h": 0.8303,
+   "ratio": 1.1591
+  }
+ },
+ {
+  "id": "Wix",
+  "file": "Wix.PNG",
+  "color": "#FAAD5F",
+  "lum": 0.016,
+  "trim": {
+   "x": 0.0055,
+   "y": 0.1574,
+   "w": 0.9891,
+   "h": 0.6847,
+   "ratio": 2.568
+  }
+ },
+ {
+  "id": "Writesonic",
+  "file": "Writesonic.PNG",
+  "color": "#4206F8",
+  "lum": 0.427,
+  "trim": {
+   "x": 0.1338,
+   "y": 0.0913,
+   "w": 0.7153,
+   "h": 0.7979,
+   "ratio": 1.1032
+  }
+ },
+ {
+  "id": "X (twitter) Premium",
+  "file": "X (twitter) Premium.PNG",
+  "color": "#8A93A6",
+  "lum": 0.071,
+  "trim": {
+   "x": 0.1423,
+   "y": 0.0545,
+   "w": 0.7178,
+   "h": 0.8939,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "YouTube",
+  "file": "YouTube .PNG",
+  "color": "#F80606",
+  "lum": 0.26,
+  "trim": {
+   "x": 0.0852,
+   "y": 0.1379,
+   "w": 0.8297,
+   "h": 0.7242,
+   "ratio": 1.4268
+  }
+ },
+ {
+  "id": "Zoom",
+  "file": "Zoom.PNG",
+  "color": "#067FF8",
+  "lum": 0.617,
+  "trim": {
+   "x": 0.118,
+   "y": 0.024,
+   "w": 0.7652,
+   "h": 0.9416,
+   "ratio": 1.0
+  }
+ },
+ {
+  "id": "airalo",
+  "file": "airalo.PNG",
+  "color": "#BF3F5F",
+  "lum": 0.499,
+  "trim": {
+   "x": 0.0474,
+   "y": 0.0409,
+   "w": 0.9051,
+   "h": 0.9167,
+   "ratio": 1.2298
+  }
+ },
+ {
+  "id": "italki",
+  "file": "italki.PNG",
+  "color": "#F80606",
+  "lum": 0.421,
+  "trim": {
+   "x": 0.0301,
+   "y": 0.1591,
+   "w": 0.9229,
+   "h": 0.7258,
+   "ratio": 1.5992
+  }
+ },
+ {
+  "id": "n8n",
+  "file": "n8n.PNG",
+  "color": "#DF1F4F",
+  "lum": 0.448,
+  "trim": {
+   "x": 0.0377,
+   "y": 0.2096,
+   "w": 0.9246,
+   "h": 0.5689,
+   "ratio": 2.0
+  }
+ },
+ {
+  "id": "nano banana",
+  "file": "nano banana.PNG",
+  "color": "#F8BC06",
+  "lum": 0.768,
+  "trim": {
+   "x": 0.1134,
+   "y": 0.153,
+   "w": 0.7063,
+   "h": 0.6875,
+   "ratio": 1.1912
+  }
+ },
+ {
+  "id": "Подписка PS Plus (Турция)",
+  "file": "Подписка PS Plus (Турция).PNG",
+  "color": "#F8BC06",
+  "lum": 0.724,
+  "trim": {
+   "x": 0.1168,
+   "y": 0.0273,
+   "w": 0.7664,
+   "h": 0.947,
+   "ratio": 1.008
+  }
+ }
+]

@@ -1,0 +1,47 @@
+{
+  "id": "services-100",
+  "name": "100+ сервисов",
+  "fps": 30,
+  "scenes": [
+    {
+      "type": "hook",
+      "duration": 2.6,
+      "kicker": "just platapay",
+      "title": "Твоя карта|тут *не нужна*",
+      "sub": "Оплачиваем зарубежные подписки за тебя — от Spotify до Adobe."
+    },
+    {
+      "type": "ticker",
+      "duration": 3.0,
+      "title": "*100+* сервисов|в одном чате",
+      "rows": 4,
+      "perRow": 9,
+      "speed": 150
+    },
+    {
+      "type": "logoGrid",
+      "duration": 3.8,
+      "count": 100,
+      "caption": "сервисов уже в списке",
+      "cols": 4,
+      "rows": 4,
+      "logos": [
+        "Spotify", "Sora 2", "GPT", "Claude", "Adobe Creative Cloud", "Canva",
+        "Notion", "Figma", "Midjournei", "Cursor", "Discord", "Duolingo",
+        "YouTube", "Twitch", "Patreon", "Booking", "Airbnb", "Coursera",
+        "PayPal", "Nintendo", "PS", "Google Cloud", "Dropbox", "Zoom",
+        "ElevenLabs", "CapCut", "Perplexity", "Suno AI", "Udemy", "Miro"
+      ]
+    },
+    {
+      "type": "cta",
+      "duration": 3.4,
+      "title": "Напиши — и *оплатим*",
+      "sub": "Без VPN и чужих карт. Просто скажи, что нужно продлить."
+    }
+  ],
+  "post": {
+    "caption": "Подписки, которые «не оплачиваются с российской карты», оплачиваются.\n\nМы закрываем 100+ сервисов: стриминги, AI-инструменты, дизайн, игры, обучение, путешествия. Ты пишешь название — мы присылаем счёт и активируем доступ.\n\nНужного сервиса нет в списке? Тоже пиши, обычно решаем.",
+    "hashtags": ["#подписки", "#оплатаподписок", "#зарубежныесервисы", "#spotify", "#chatgpt", "#adobe", "#platapay"]
+  }
+}
