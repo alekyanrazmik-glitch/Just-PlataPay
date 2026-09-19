@@ -17,6 +17,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { startServer } from './server.mjs';
+import { buildVoiceTrack } from './voice.mjs';
 
 const require = createRequire(import.meta.url);
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -40,6 +41,7 @@ const SILENT_AUDIO = args['no-audio'] ? false : true;
 /* JPEG frames are ~35% faster to capture than PNG and the difference survives
    x264 unnoticed; pass --frames=png if you ever need a lossless intermediate. */
 const FRAME_TYPE = args.frames === 'png' ? 'png' : 'jpeg';
+const WITH_VOICE = !args['no-voice'];
 
 /* ------------------------------------------------------------- toolchain  */
 
@@ -94,9 +96,12 @@ function listProjects() {
     .sort();
 }
 
-function ffmpegArgs(fps, outFile) {
+function ffmpegArgs(fps, outFile, voiceTrack) {
   const a = ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(fps), '-i', '-'];
-  if (SILENT_AUDIO && FORMAT === 'mp4') {
+  const withAudio = voiceTrack || (SILENT_AUDIO && FORMAT === 'mp4');
+  if (voiceTrack) {
+    a.push('-i', voiceTrack);
+  } else if (SILENT_AUDIO && FORMAT === 'mp4') {
     a.push('-f', 'lavfi', '-i', 'anullsrc=channel_layout=stereo:sample_rate=44100');
   }
   if (FORMAT === 'webm') {
@@ -111,7 +116,7 @@ function ffmpegArgs(fps, outFile) {
       '-pix_fmt', 'yuv420p',
       '-movflags', '+faststart'
     );
-    if (SILENT_AUDIO) a.push('-c:a', 'aac', '-b:a', '128k', '-shortest');
+    if (withAudio) a.push('-c:a', 'aac', '-b:a', voiceTrack ? '160k' : '128k', '-shortest');
   }
   a.push('-r', String(fps), outFile);
   return a;
@@ -154,9 +159,28 @@ async function renderProject(browser, baseUrl, name) {
   const meta = await page.evaluate(() => ({
     duration: window.REEL.duration,
     fps: window.REEL.fps,
+    project: window.REEL.project,
     post: window.REEL.project.post || null,
     posterAt: window.REEL.project.posterAt ?? 1.2,
   }));
+
+  // Narration, when the project has any. A missing voice never fails a render:
+  // the reel still has to ship, silent.
+  let voiceTrack = null;
+  if (WITH_VOICE) {
+    try {
+      const built = await buildVoiceTrack({
+        projectName: name,
+        project: meta.project,
+        duration: meta.duration,
+        ffmpeg: FFMPEG,
+        provider: args.provider,
+      });
+      if (built) voiceTrack = built.track;
+    } catch (err) {
+      process.stdout.write(`   ! озвучка пропущена: ${err.message}\n`);
+    }
+  }
 
   const fps = FPS_OVERRIDE || meta.fps || 30;
   const frames = Math.max(1, Math.round(meta.duration * fps));
@@ -164,10 +188,11 @@ async function renderProject(browser, baseUrl, name) {
   fs.mkdirSync(OUT_DIR, { recursive: true });
 
   process.stdout.write(
-    `\n▶ ${name}  ${meta.duration.toFixed(2)}s · ${fps}fps · ${frames} кадров → ${path.relative(process.cwd(), outFile)}\n`
+    `\n▶ ${name}  ${meta.duration.toFixed(2)}s · ${fps}fps · ${frames} кадров` +
+      `${voiceTrack ? ' · с озвучкой' : ''} → ${path.relative(process.cwd(), outFile)}\n`
   );
 
-  const ff = spawn(FFMPEG, ffmpegArgs(fps, outFile), { stdio: ['pipe', 'inherit', 'inherit'] });
+  const ff = spawn(FFMPEG, ffmpegArgs(fps, outFile, voiceTrack), { stdio: ['pipe', 'inherit', 'inherit'] });
   const done = new Promise((resolve, reject) => {
     ff.on('error', reject);
     ff.stdin.on('error', reject);
