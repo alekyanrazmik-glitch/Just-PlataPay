@@ -32,6 +32,30 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const CACHE = path.join(HERE, '.voice-cache');
 const SOURCE = path.join(HERE, 'voice');
 
+/**
+ * Where the voice comes from, resolved once: the environment beats the project,
+ * the project beats brand.json. So a whole batch can be voiced without editing
+ * a single file — export the key, the provider and the voice id, then render.
+ */
+export function resolveVoiceSettings(project = {}, overrides = {}) {
+  let brandVoice = {};
+  try {
+    brandVoice = JSON.parse(fs.readFileSync(path.join(HERE, 'brand.json'), 'utf8')).voice || {};
+  } catch {}
+  const env = {
+    provider: process.env.VOICE_PROVIDER,
+    voiceId: process.env.VOICE_ID,
+    model: process.env.VOICE_MODEL,
+  };
+  const out = {};
+  for (const layer of [brandVoice, project.voiceSettings || {}, env, overrides]) {
+    for (const [k, v] of Object.entries(layer)) {
+      if (v !== undefined && v !== null && v !== '') out[k] = v;
+    }
+  }
+  return out;
+}
+
 /* ------------------------------------------------------------------- lines */
 
 /** Every narration line with its absolute start second. */
@@ -275,8 +299,8 @@ export async function buildVoiceTrack({ projectName, project, duration, ffmpeg, 
   const lines = checkTiming(collectLines(project));
   if (!lines.length) return null;
 
-  const settings = { ...(project.voiceSettings || {}) };
-  const name = provider || process.env.VOICE_PROVIDER || settings.provider || 'file';
+  const settings = resolveVoiceSettings(project, provider ? { provider } : {});
+  const name = settings.provider || 'file';
   const make = providers[name];
   if (!make) throw new Error(`неизвестный провайдер озвучки: ${name}`);
 
@@ -348,7 +372,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       })
     );
     if (args.voices) {
-      const providerName = args.provider || process.env.VOICE_PROVIDER || 'heygen';
+      const providerName = args.provider || resolveVoiceSettings().provider || 'heygen';
       const voices = await listVoices(providerName, args.lang === true ? '' : args.lang);
       if (!voices.length) {
         console.log(`Голосов не нашлось (провайдер ${providerName}${args.lang ? `, язык ${args.lang}` : ''}).`);
@@ -357,7 +381,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         console.log(`  ${String(v.id).padEnd(36)} ${v.name}  ${v.lang} ${v.gender}`.trimEnd());
       }
       console.log(
-        `\nВыбранный id впишите в проект: "voiceSettings": { "provider": "${providerName}", "voiceId": "..." }`
+        `\nЧтобы озвучить этим голосом:\n` +
+          `  export VOICE_PROVIDER=${providerName} VOICE_ID=<id из списка>\n` +
+          `  npm run render\n` +
+          `Либо впишите то же самое в brand.json → "voice", чтобы не экспортировать каждый раз.`
       );
       process.exit(0);
     }

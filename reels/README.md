@@ -191,24 +191,23 @@ npm run voice -- --project=<проект> --check
 | `elevenlabs` | `ELEVENLABS_API_KEY` | сильный русский синтез |
 | `openai` | `OPENAI_API_KEY` | попроще и подешевле |
 
-Сначала выберите голос — дефолтного русского ни у кого нет:
+Весь путь до озвученных роликов — четыре строки:
 
 ```bash
 export HEYGEN_API_KEY=...
-npm run voice -- --voices --provider=heygen --lang=ru
+npm run voice -- --voices --provider=heygen --lang=ru   # выбрать голос
+export VOICE_PROVIDER=heygen VOICE_ID=<id из списка>
+npm run render                                          # ролики уже с голосом
 ```
 
-Команда печатает id, имя и язык. Нужный id — в проект:
-
-```json
-"voiceSettings": { "provider": "heygen", "voiceId": "<id из списка>" }
-```
-
-Дальше обычный рендер:
+Дефолтного русского голоса нет ни у одного провайдера, поэтому id обязателен.
+Файлы при этом править не нужно: настройки берутся из переменных окружения,
+из проекта (`voiceSettings`) или из `brand.json` → `voice` — в таком порядке
+приоритета. Если озвучивать регулярно, впишите провайдера и голос в `brand.json`
+и забудьте про экспорт.
 
 ```bash
-npm run render                      # соберёт ролики уже с голосом
-npm run render -- --no-voice        # без голоса
+npm run render -- --no-voice        # собрать без голоса
 ```
 
 HeyGen синтезирует через `POST /v3/voices/speech` (движок `starfish`) — это
