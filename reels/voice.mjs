@@ -130,6 +130,24 @@ export function checkTiming(lines) {
 
 /* --------------------------------------------------------------- providers */
 
+/** Turn HeyGen's error envelope into something actionable. */
+function explainHeygen(body) {
+  let code = '';
+  let message = body.slice(0, 300);
+  try {
+    const err = JSON.parse(body).error || {};
+    code = err.code || '';
+    message = err.message || message;
+  } catch {}
+  const hints = {
+    insufficient_credit:
+      'на аккаунте HeyGen закончились API-кредиты — пополните их либо переключитесь на другого провайдера (ELEVENLABS_API_KEY / OPENAI_API_KEY) или на запись живого голоса',
+    invalid_parameter: 'HeyGen не принял поле запроса',
+    unauthorized: 'ключ HEYGEN_API_KEY недействителен',
+  };
+  return hints[code] ? `${message} — ${hints[code]}` : message;
+}
+
 const providers = {
   /** Pre-recorded files: reels/voice/<project>/01.wav, 02.wav, … in line order. */
   async file({ projectName, index }) {
@@ -157,15 +175,16 @@ const providers = {
     const res = await fetch('https://api.heygen.com/v3/voices/speech', {
       method: 'POST',
       headers: { 'x-api-key': key, 'content-type': 'application/json' },
+      // No `engine` here: it is a query parameter when listing voices, but the
+      // speech endpoint rejects it outright with "Extra inputs are not permitted".
       body: JSON.stringify({
         voice_id: settings.voiceId,
         text,
-        engine: settings.engine || 'starfish',
-        ...(settings.speed ? { speed: settings.speed } : {}),
+        ...(settings.speed ? { speed: Number(settings.speed) } : {}),
       }),
     });
     const body = await res.text();
-    if (!res.ok) throw new Error(`HeyGen ${res.status}: ${body.slice(0, 300)}`);
+    if (!res.ok) throw new Error(`HeyGen ${res.status}: ${explainHeygen(body)}`);
     let json;
     try {
       json = JSON.parse(body);
@@ -220,22 +239,101 @@ const providers = {
 };
 
 /* Voice catalogues, so a Russian voice can be picked without leaving the CLI. */
+
+/**
+ * Find the voices array wherever the provider chose to nest it. Guessing one
+ * path from documentation is how the first attempt came back empty; this walks
+ * the payload instead and takes the first array that looks like voices.
+ */
+/** Anything that looks like a "give me the next page" handle. */
+function findPageToken(node, depth = 0) {
+  if (!node || typeof node !== 'object' || depth > 3) return null;
+  for (const [k, v] of Object.entries(node)) {
+    if (typeof v === 'string' && v && /token|cursor/i.test(k) && !/^(id|voice)/i.test(k)) return v;
+    if (v && typeof v === 'object') {
+      const hit = findPageToken(v, depth + 1);
+      if (hit) return hit;
+    }
+  }
+  return null;
+}
+
+/** Non-array top-level fields, so an unfamiliar paging scheme is visible. */
+function describePaging(node) {
+  const out = [];
+  const walk = (obj, prefix, depth) => {
+    if (!obj || typeof obj !== 'object' || depth > 2) return;
+    for (const [k, v] of Object.entries(obj)) {
+      if (Array.isArray(v)) out.push(`${prefix}${k}[${v.length}]`);
+      else if (v && typeof v === 'object') walk(v, `${prefix}${k}.`, depth + 1);
+      else out.push(`${prefix}${k}=${String(v).slice(0, 40)}`);
+    }
+  };
+  walk(node, '', 0);
+  return out.join(' ');
+}
+
+function findVoiceArray(node, depth = 0) {
+  if (!node || depth > 5) return null;
+  if (Array.isArray(node)) {
+    return node.some((v) => v && typeof v === 'object' && (v.voice_id || v.id)) ? node : null;
+  }
+  if (typeof node === 'object') {
+    for (const value of Object.values(node)) {
+      const hit = findVoiceArray(value, depth + 1);
+      if (hit) return hit;
+    }
+  }
+  return null;
+}
+
 const voiceLists = {
   async heygen() {
     const key = process.env.HEYGEN_API_KEY;
     if (!key) throw new Error('нет HEYGEN_API_KEY');
-    const res = await fetch('https://api.heygen.com/v3/voices?engine=starfish', {
-      headers: { 'x-api-key': key },
-    });
-    if (!res.ok) throw new Error(`HeyGen ${res.status}: ${(await res.text()).slice(0, 200)}`);
-    const json = await res.json();
-    const items = json?.data?.voices || json?.voices || json?.data || [];
-    return items.map((v) => ({
-      id: v.voice_id || v.id,
-      name: v.name || v.display_name || '',
-      lang: v.language || v.locale || v.language_code || '',
-      gender: v.gender || '',
-    }));
+    const bases = [
+      'https://api.heygen.com/v3/voices?engine=starfish',
+      'https://api.heygen.com/v3/voices',
+      'https://api.heygen.com/v2/voices',
+    ];
+    const tried = [];
+    for (const base of bases) {
+      const all = [];
+      let url = `${base}&limit=100`.replace('?&', '?');
+      let hops = 0;
+      let shape = '';
+      while (url && hops < 40) {
+        const res = await fetch(url, { headers: { 'x-api-key': key } });
+        const body = await res.text();
+        if (!res.ok) {
+          tried.push(`${base} → ${res.status} ${body.slice(0, 160)}`);
+          break;
+        }
+        let json;
+        try {
+          json = JSON.parse(body);
+        } catch {
+          tried.push(`${base} → не JSON: ${body.slice(0, 160)}`);
+          break;
+        }
+        const page = findVoiceArray(json) || [];
+        all.push(...page);
+        if (!shape) shape = describePaging(json);
+        const token = findPageToken(json);
+        url = token ? `${base}&limit=100&token=${encodeURIComponent(token)}`.replace('?&', '?') : null;
+        hops += 1;
+      }
+      if (all.length) {
+        if (process.env.VOICE_DEBUG) console.log(`[${base}] ${all.length} голосов, пагинация: ${shape}`);
+        return all.map((v) => ({
+          id: v.voice_id || v.id,
+          name: v.name || v.display_name || '',
+          lang: v.language || v.locale || v.language_code || v.lang || '',
+          gender: v.gender || '',
+        }));
+      }
+    }
+    throw new Error(`HeyGen не отдал список голосов.\n  ${tried.join('\n  ')}`);
   },
 
   async elevenlabs() {
@@ -261,10 +359,16 @@ export async function listVoices(providerName, lang) {
   if (lang) {
     const needle = lang.toLowerCase();
     const ru = needle.startsWith('ru');
-    voices = voices.filter((v) => {
+    const narrowed = voices.filter((v) => {
       const hay = `${v.lang} ${v.name}`.toLowerCase();
-      return hay.includes(needle) || (ru && (hay.includes('russian') || hay.includes('ru-ru')));
+      return ru ? /russian|ru-ru|\bru\b/.test(hay) : hay.includes(needle);
     });
+    // Better to show everything than to report "no voices" over a bad filter.
+    if (!narrowed.length) {
+      console.log(`По языку «${lang}» ничего не совпало, показываю все ${voices.length}:`);
+    } else {
+      voices = narrowed;
+    }
   }
   return voices;
 }

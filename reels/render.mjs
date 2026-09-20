@@ -179,6 +179,11 @@ async function renderProject(browser, baseUrl, name) {
       if (built) voiceTrack = built.track;
     } catch (err) {
       process.stdout.write(`   ! озвучка пропущена: ${err.message}\n`);
+      // Surface it on the run page too: the volume check fails the build, but
+      // the reason lives in another step's log where nobody looks first.
+      if (process.env.GITHUB_ACTIONS) {
+        process.stdout.write(`::error::озвучка ${name}: ${err.message}\n`);
+      }
     }
   }
 
