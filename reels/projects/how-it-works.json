@@ -1,0 +1,53 @@
+{
+  "id": "how-it-works",
+  "name": "Как это работает",
+  "fps": 30,
+  "scenes": [
+    {
+      "type": "hook",
+      "duration": 2.3,
+      "kicker": "как это работает",
+      "title": "Три шага|и *готово*",
+      "voice": "Три шага — и готово."
+    },
+    {
+      "type": "steps",
+      "duration": 6.4,
+      "title": "Без регистраций|и приложений",
+      "voice": "Пишешь сервис. Получаешь счёт в рублях. Пользуешься — подписка твоя.",
+      "items": [
+        { "head": "Пишешь сервис", "desc": "Название и тариф — нам в сообщения." },
+        { "head": "Получаешь счёт", "desc": "Сумма в рублях и срок — до оплаты." },
+        { "head": "Пользуешься", "desc": "Подписка на твоём аккаунте, чек в чате." }
+      ]
+    },
+    {
+      "type": "ticker",
+      "duration": 2.8,
+      "title": "Нейросети —|и не *только*",
+      "rows": 4,
+      "perRow": 9,
+      "speed": 165,
+      "voice": "Нейросети, стриминги, дизайн, игры.",
+      "logos": [
+        "GPT", "Claude", "Midjournei", "Cursor", "Sora 2", "ElevenLabs",
+        "Spotify", "YouTube", "Twitch", "Discord", "Patreon", "Boosty",
+        "Adobe Creative Cloud", "Adobe Photoshop", "Figma", "Canva", "Notion", "Miro",
+        "PS", "Nintendo", "Faceit", "Booking", "Airbnb", "Agoda",
+        "Coursera", "Udemy", "Duolingo", "italki", "airalo", "Zoom",
+        "Dropbox", "Google Cloud", "Cloudflare", "Supabase", "CapCut", "Epidemic Sound"
+      ]
+    },
+    {
+      "type": "cta",
+      "duration": 3.2,
+      "title": "Начни с *одного*|сообщения",
+      "sub": "Ссылка в профиле.",
+      "voice": "Начни с одного сообщения."
+    }
+  ],
+  "post": {
+    "caption": "Как оплатить зарубежный сервис через нас — за три шага:\n\n1. Пишешь, какой сервис и тариф нужен\n2. Получаешь счёт: сумма в рублях и срок\n3. Пользуешься — подписка на твоём аккаунте\n\nБез регистраций, приложений и чужих логинов. Нейросети, стриминги, дизайн, игры, обучение, поездки.",
+    "hashtags": ["#оплатаподписок", "#какэтоработает", "#нейросети", "#подписки", "#platapay"]
+  }
+}

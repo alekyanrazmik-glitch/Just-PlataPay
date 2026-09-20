@@ -1,0 +1,130 @@
+name: Риллсы
+
+# Запускается вручную: вкладка Actions → «Риллсы» → Run workflow.
+# Ключ синтеза лежит в секретах репозитория, локальная машина не нужна.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Что сделать"
+        type: choice
+        default: render
+        options:
+          - render
+          - voices
+      project:
+        description: "Какой ролик (all — все четыре)"
+        type: string
+        default: all
+      provider:
+        description: "Откуда голос"
+        type: choice
+        default: heygen
+        options:
+          - heygen
+          - elevenlabs
+          - openai
+          - none
+      voice_id:
+        description: "id голоса (для mode=render; взять из прогона mode=voices)"
+        type: string
+        default: ""
+      commit:
+        description: "Положить готовые файлы обратно в ветку"
+        type: boolean
+        default: false
+
+jobs:
+  reels:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: reels
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: reels/package-lock.json
+
+      - name: Поставить зависимости
+        run: npm ci
+
+      - name: Поставить Chromium
+        # версия браузера берётся из playwright-core, чтобы кадры совпадали с локальными
+        run: npx --yes playwright@$(node -p "require('playwright-core/package.json').version") install --with-deps chromium
+
+      - name: Показать голоса
+        if: inputs.mode == 'voices'
+        env:
+          HEYGEN_API_KEY: ${{ secrets.HEYGEN_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: |
+          set -eo pipefail
+          echo '### Русские голоса — ${{ inputs.provider }}' >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          node voice.mjs --voices --provider=${{ inputs.provider }} --lang=ru 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Собрать ролики
+        if: inputs.mode == 'render'
+        env:
+          HEYGEN_API_KEY: ${{ secrets.HEYGEN_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          VOICE_PROVIDER: ${{ inputs.provider }}
+          VOICE_ID: ${{ inputs.voice_id }}
+        run: |
+          if [ "${{ inputs.provider }}" = "none" ]; then
+            node render.mjs --project='${{ inputs.project }}' --no-voice
+          else
+            node render.mjs --project='${{ inputs.project }}'
+          fi
+
+      - name: Проверить, что голос действительно записался
+        if: inputs.mode == 'render' && inputs.provider != 'none'
+        run: |
+          # При сбое синтеза рендер не падает: он кладёт тихую дорожку и едет
+          # дальше. Поэтому проверяем не наличие потока, а громкость — тишина
+          # во весь ролик означает, что озвучка отвалилась молча.
+          fail=0
+          for f in out/*.mp4; do
+            mean=$(./node_modules/ffmpeg-static/ffmpeg -hide_banner -i "$f" \
+              -af volumedetect -f null - 2>&1 | sed -n 's/.*mean_volume: \(-*[0-9.]*\) dB.*/\1/p')
+            if [ -z "$mean" ]; then
+              echo "::error::в $f нет звуковой дорожки"
+              fail=1
+            elif [ "$(echo "$mean < -70" | bc -l)" = "1" ]; then
+              echo "::error::$f собрался немым (средняя громкость $mean dB) — синтез не сработал, смотрите лог шага «Собрать ролики»"
+              fail=1
+            else
+              echo "$f — голос на месте ($mean dB)"
+            fi
+          done
+          exit $fail
+
+      - name: Отдать файлы
+        if: inputs.mode == 'render'
+        uses: actions/upload-artifact@v4
+        with:
+          name: reels
+          path: |
+            reels/out/*.mp4
+            reels/out/*.jpg
+            reels/out/*.txt
+          retention-days: 30
+
+      - name: Положить в ветку
+        if: inputs.mode == 'render' && inputs.commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add out
+          git diff --cached --quiet || git commit -m "Собрать риллсы (${{ inputs.provider }})"
+          git push

@@ -1,0 +1,12 @@
+{
+  "name": "PlataPay",
+  "handle": "",
+  "theme": {
+    "accent": "#2BE08C",
+    "accent-2": "#7A5CFF"
+  },
+  "voice": {
+    "provider": "",
+    "voiceId": ""
+  }
+}
