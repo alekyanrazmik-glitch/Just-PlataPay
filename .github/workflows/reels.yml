@@ -103,6 +103,9 @@ jobs:
           VOICE_PROVIDER: ${{ inputs.provider }}
           VOICE_ID: ${{ inputs.voice_id }}
         run: |
+          # Метка времени: reels/out/ лежит в репозитории, и без неё проверка
+          # ниже мерила бы и те ролики, что пришли из checkout, а не собрались.
+          touch "$RUNNER_TEMP/render-start"
           if [ "${{ inputs.provider }}" = "none" ]; then
             node render.mjs --project='${{ inputs.project }}' --no-voice
           else
@@ -116,7 +119,12 @@ jobs:
           # дальше. Поэтому проверяем не наличие потока, а громкость — тишина
           # во весь ролик означает, что озвучка отвалилась молча.
           fail=0
-          for f in out/*.mp4; do
+          fresh=$(find out -name '*.mp4' -newer "$RUNNER_TEMP/render-start")
+          if [ -z "$fresh" ]; then
+            echo "::error::рендер не создал ни одного файла"
+            exit 1
+          fi
+          for f in $fresh; do
             mean=$(./node_modules/ffmpeg-static/ffmpeg -hide_banner -i "$f" \
               -af volumedetect -f null - 2>&1 | sed -n 's/.*mean_volume: \(-*[0-9.]*\) dB.*/\1/p')
             if [ -z "$mean" ]; then

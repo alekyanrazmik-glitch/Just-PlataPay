@@ -157,11 +157,12 @@ const providers = {
     const res = await fetch('https://api.heygen.com/v3/voices/speech', {
       method: 'POST',
       headers: { 'x-api-key': key, 'content-type': 'application/json' },
+      // No `engine` here: it is a query parameter when listing voices, but the
+      // speech endpoint rejects it outright with "Extra inputs are not permitted".
       body: JSON.stringify({
         voice_id: settings.voiceId,
         text,
-        engine: settings.engine || 'starfish',
-        ...(settings.speed ? { speed: settings.speed } : {}),
+        ...(settings.speed ? { speed: Number(settings.speed) } : {}),
       }),
     });
     const body = await res.text();
