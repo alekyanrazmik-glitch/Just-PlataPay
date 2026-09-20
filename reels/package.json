@@ -1,9 +1,9 @@
 {
-  "name": "justplatapay-reels",
+  "name": "platapay-reels",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Вертикальные видео-риллс Just PlataPay: HTML-сцены на логотипах из репозитория, рендер в MP4 1080x1920.",
+  "description": "Вертикальные видео-риллс PlataPay: HTML-сцены на логотипах из репозитория, рендер в MP4 1080x1920.",
   "scripts": {
     "preview": "node server.mjs --port=4321",
     "render": "node render.mjs",

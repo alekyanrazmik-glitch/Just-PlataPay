@@ -518,10 +518,16 @@ const scenes = {
 
     const lockup = document.createElement('div');
     lockup.className = 'lockup';
-    lockup.innerHTML =
-      `<span class="just">${ctx.brand.prefix || 'Just'}</span>` +
-      `<span>${ctx.brand.name || 'PlataPay'}</span>` +
-      `<span class="dot"></span>`;
+    if (ctx.brand.prefix) {
+      const prefix = document.createElement('span');
+      prefix.className = 'just';
+      prefix.textContent = ctx.brand.prefix;
+      lockup.appendChild(prefix);
+    }
+    const wordmark = document.createElement('span');
+    wordmark.textContent = ctx.brand.name || '';
+    lockup.appendChild(wordmark);
+    lockup.appendChild(document.createElement('span')).className = 'dot';
     el.appendChild(lockup);
 
     const title = document.createElement('div');
@@ -537,10 +543,15 @@ const scenes = {
       el.appendChild(sub);
     }
 
-    const handle = document.createElement('div');
-    handle.className = 'handle';
-    handle.textContent = def.handle || ctx.brand.handle || '';
-    el.appendChild(handle);
+    // No handle configured yet? Then no empty pill on the closing card.
+    const handleText = def.handle || ctx.brand.handle || '';
+    let handle = null;
+    if (handleText) {
+      handle = document.createElement('div');
+      handle.className = 'handle';
+      handle.textContent = handleText;
+      el.appendChild(handle);
+    }
 
     return {
       el,
@@ -555,10 +566,12 @@ const scenes = {
           sub.style.transform = `translate3d(0, ${(1 - p) * 20}px, 0)`;
         }
         // gentle breathing pulse so the last frames never look frozen
-        const hp = ease.outBack(clamp01((local - 0.8) / 0.55));
-        const pulse = 1 + 0.018 * Math.sin(Math.max(local - 1.2, 0) * 3.4);
-        handle.style.opacity = clamp01((local - 0.8) / 0.3);
-        handle.style.transform = `scale(${lerp(0.8, 1, hp) * pulse})`;
+        if (handle) {
+          const hp = ease.outBack(clamp01((local - 0.8) / 0.55));
+          const pulse = 1 + 0.018 * Math.sin(Math.max(local - 1.2, 0) * 3.4);
+          handle.style.opacity = clamp01((local - 0.8) / 0.3);
+          handle.style.transform = `scale(${lerp(0.8, 1, hp) * pulse})`;
+        }
       },
     };
   },
