@@ -187,7 +187,7 @@ npm run voice -- --project=<проект> --check
 | провайдер | что нужно | когда |
 | --- | --- | --- |
 | `file` | файлы в `reels/voice/<проект>/01.wav`, `02.wav`… | живой диктор — всегда лучше синтеза |
-| `heygen` | `HEYGEN_API_KEY` | если HeyGen уже оплачен |
+| `heygen` | `HEYGEN_API_KEY` + API-кредиты на аккаунте | подписка HeyGen и API-кредиты — разные вещи: без кредитов синтез отвечает `402 insufficient_credit` |
 | `elevenlabs` | `ELEVENLABS_API_KEY` | сильный русский синтез |
 | `openai` | `OPENAI_API_KEY` | попроще и подешевле |
 

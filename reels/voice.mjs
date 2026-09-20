@@ -130,6 +130,24 @@ export function checkTiming(lines) {
 
 /* --------------------------------------------------------------- providers */
 
+/** Turn HeyGen's error envelope into something actionable. */
+function explainHeygen(body) {
+  let code = '';
+  let message = body.slice(0, 300);
+  try {
+    const err = JSON.parse(body).error || {};
+    code = err.code || '';
+    message = err.message || message;
+  } catch {}
+  const hints = {
+    insufficient_credit:
+      'на аккаунте HeyGen закончились API-кредиты — пополните их либо переключитесь на другого провайдера (ELEVENLABS_API_KEY / OPENAI_API_KEY) или на запись живого голоса',
+    invalid_parameter: 'HeyGen не принял поле запроса',
+    unauthorized: 'ключ HEYGEN_API_KEY недействителен',
+  };
+  return hints[code] ? `${message} — ${hints[code]}` : message;
+}
+
 const providers = {
   /** Pre-recorded files: reels/voice/<project>/01.wav, 02.wav, … in line order. */
   async file({ projectName, index }) {
@@ -166,7 +184,7 @@ const providers = {
       }),
     });
     const body = await res.text();
-    if (!res.ok) throw new Error(`HeyGen ${res.status}: ${body.slice(0, 300)}`);
+    if (!res.ok) throw new Error(`HeyGen ${res.status}: ${explainHeygen(body)}`);
     let json;
     try {
       json = JSON.parse(body);
