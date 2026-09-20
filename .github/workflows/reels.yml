@@ -45,19 +45,41 @@ jobs:
         working-directory: reels
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: reels/package-lock.json
 
+      - name: Проверить, что ключ на месте
+        if: inputs.provider != 'none'
+        env:
+          HEYGEN_API_KEY: ${{ secrets.HEYGEN_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          # Лучше упасть здесь за две секунды с понятным текстом, чем через
+          # двадцать минут рендера на пустом ключе.
+          case "${{ inputs.provider }}" in
+            heygen)     name=HEYGEN_API_KEY;     value="$HEYGEN_API_KEY" ;;
+            elevenlabs) name=ELEVENLABS_API_KEY; value="$ELEVENLABS_API_KEY" ;;
+            openai)     name=OPENAI_API_KEY;     value="$OPENAI_API_KEY" ;;
+          esac
+          if [ -z "$value" ]; then
+            echo "::error::Секрет $name не задан. Добавьте его: ${{ github.server_url }}/${{ github.repository }}/settings/secrets/actions → New repository secret, имя $name. Либо выберите provider=none, чтобы собрать ролики без голоса."
+            exit 1
+          fi
+          echo "$name на месте"
+
       - name: Поставить зависимости
         run: npm ci
 
       - name: Поставить Chromium
-        # версия браузера берётся из playwright-core, чтобы кадры совпадали с локальными
+        # нужен только для рендера; версия берётся из playwright-core, чтобы
+        # кадры на раннере совпадали с локальными
+        if: inputs.mode == 'render'
         run: npx --yes playwright@$(node -p "require('playwright-core/package.json').version") install --with-deps chromium
 
       - name: Показать голоса
