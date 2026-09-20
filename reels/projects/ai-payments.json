@@ -1,0 +1,59 @@
+{
+  "id": "ai-payments",
+  "name": "Оплата AI-сервисов",
+  "fps": 30,
+  "scenes": [
+    {
+      "type": "hook",
+      "duration": 2.6,
+      "kicker": "platapay",
+      "size": "small",
+      "title": "Карта не берёт|подписку на *ИИ*?",
+      "sub": "Оплатим за тебя. Доступ — на твоём аккаунте.",
+      "voice": "Карта не берёт подписку?"
+    },
+    {
+      "type": "ticker",
+      "duration": 3.0,
+      "title": "Все *нейросети*|в одном месте",
+      "rows": 4,
+      "perRow": 9,
+      "speed": 150,
+      "voice": "Чат-джи-пи-ти, Клод, Мидджорни, Курсор.",
+      "logos": [
+        "GPT", "Claude", "Gemini (Google AI)", "Grok", "Perplexity", "Midjournei",
+        "Sora 2", "Kling Ai", "Cursor", "GitHub Copilot", "Codex", "ElevenLabs",
+        "Suno AI", "Kits.ai", "Ideogram", "Krea.ai", "Higgsfield AI", "Freepik",
+        "HeyGen", "Gling", "MiniMax", "Qwen", "Kimi", "Manus A",
+        "OpenRouter", "nano banana", "Writesonic", "DeepL", "Pika", "Lensa AI",
+        "Adobe Firefly", "Canva", "Gamma App", "Weavy", "n8n", "Manychat"
+      ]
+    },
+    {
+      "type": "logoGrid",
+      "duration": 3.8,
+      "count": 99,
+      "caption": "сервисов в списке",
+      "cols": 4,
+      "rows": 4,
+      "voice": "Оплатим любой из них — на твой аккаунт.",
+      "logos": [
+        "GPT", "Claude", "Gemini (Google AI)", "Grok",
+        "Midjournei", "Sora 2", "Cursor", "GitHub Copilot",
+        "ElevenLabs", "Suno AI", "Kling Ai", "Ideogram",
+        "Perplexity", "Krea.ai", "HeyGen", "Freepik"
+      ]
+    },
+    {
+      "type": "cta",
+      "duration": 3.4,
+      "title": "Напиши — и *оплатим*",
+      "sub": "Ссылка в профиле.",
+      "voice": "Напиши нам. Ссылка в профиле."
+    }
+  ],
+  "post": {
+    "caption": "Подписка на нейросеть не оплачивается российской картой — обычная история.\n\nМы оплачиваем зарубежные AI-сервисы и другие подписки: ChatGPT, Claude, Midjourney, Cursor, ElevenLabs, Sora и не только. Доступ остаётся на твоём аккаунте — без чужих логинов и шаринга.\n\nНужного сервиса нет в списке? Напиши, обычно решаем.",
+    "hashtags": ["#нейросети", "#chatgpt", "#midjourney", "#оплатаподписок", "#ai", "#platapay"]
+  }
+}

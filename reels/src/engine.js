@@ -282,11 +282,13 @@ const scenes = {
     el.appendChild(grid);
 
     const target = def.count || 100;
+    // `plus: false` when the number is exact and should not claim "and more"
+    const suffix = def.plus === false ? '' : '+';
     return {
       el,
       update(local, dur) {
         const cp = ease.outExpo(clamp01((local - 0.1) / Math.max(dur - 0.9, 0.6)));
-        counter.textContent = `${Math.round(target * cp)}+`;
+        counter.textContent = `${Math.round(target * cp)}${suffix}`;
         counter.style.opacity = clamp01(local / 0.3);
         cap.style.opacity = ease.outCubic(clamp01((local - 0.25) / 0.5));
         chips.forEach((chip, i) => {

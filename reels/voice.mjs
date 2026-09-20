@@ -70,6 +70,27 @@ export function estimateSeconds(text) {
   return +(syllables / 5.6 + pauses * 0.28 + 0.2).toFixed(2);
 }
 
+/** A numbered sheet to read from, written next to where recordings go. */
+export function writeScript(projectName, lines) {
+  const dir = path.join(SOURCE, projectName);
+  fs.mkdirSync(dir, { recursive: true });
+  const body = lines
+    .map((line, i) => {
+      const n = String(i + 1).padStart(2, '0');
+      return `${n}.  (${line.at}s, есть ${line.room}s)  →  ${n}.wav\n    ${line.text}`;
+    })
+    .join('\n\n');
+  const file = path.join(dir, 'script.txt');
+  fs.writeFileSync(
+    file,
+    `Реплики для ролика «${projectName}»\n` +
+      `Запишите каждую отдельным файлом с этим номером в этой папке.\n` +
+      `В скобках — на какой секунде реплика звучит и сколько секунд на неё есть.\n\n${body}\n`,
+    'utf8'
+  );
+  return file;
+}
+
 /** Warn where a line cannot fit the scene it belongs to. */
 export function checkTiming(lines) {
   return lines.map((line) => {
@@ -249,6 +270,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         `  ${String(line.at).padStart(6)}s  ~${line.need}s / ${line.room}s${flag}\n          ${line.text}`
       );
     }
+    if (lines.length) console.log(`  → ${path.relative(process.cwd(), writeScript(projectName, lines))}`);
     if (args.check) continue;
 
     const { createRequire } = await import('node:module');
