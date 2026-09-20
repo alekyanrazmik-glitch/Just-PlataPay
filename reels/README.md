@@ -187,14 +187,33 @@ npm run voice -- --project=<проект> --check
 | провайдер | что нужно | когда |
 | --- | --- | --- |
 | `file` | файлы в `reels/voice/<проект>/01.wav`, `02.wav`… | живой диктор — всегда лучше синтеза |
-| `elevenlabs` | `ELEVENLABS_API_KEY` | лучший русский синтез; id голоса — в `voiceSettings.voiceId` |
+| `heygen` | `HEYGEN_API_KEY` | если HeyGen уже оплачен |
+| `elevenlabs` | `ELEVENLABS_API_KEY` | сильный русский синтез |
 | `openai` | `OPENAI_API_KEY` | попроще и подешевле |
 
+Сначала выберите голос — дефолтного русского ни у кого нет:
+
 ```bash
-export ELEVENLABS_API_KEY=...
+export HEYGEN_API_KEY=...
+npm run voice -- --voices --provider=heygen --lang=ru
+```
+
+Команда печатает id, имя и язык. Нужный id — в проект:
+
+```json
+"voiceSettings": { "provider": "heygen", "voiceId": "<id из списка>" }
+```
+
+Дальше обычный рендер:
+
+```bash
 npm run render                      # соберёт ролики уже с голосом
 npm run render -- --no-voice        # без голоса
 ```
+
+HeyGen синтезирует через `POST /v3/voices/speech` (движок `starfish`) — это
+отдельная ручка для чистого аудио, видео и аватары она не трогает. Скорость речи
+задаётся в `voiceSettings.speed` (0.5–2.0), движок — в `voiceSettings.engine`.
 
 Синтезированные реплики кэшируются в `reels/.voice-cache/` по тексту: правка
 одной фразы не заставляет переозвучивать весь ролик.

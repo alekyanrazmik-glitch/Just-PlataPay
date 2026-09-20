@@ -11,8 +11,12 @@
  *   file        pre-recorded audio from reels/voice/<project>/01.wav, 02.wav …
  *               (a human voice always beats a synthetic one — this is the path
  *               to use once someone records the lines)
- *   elevenlabs  needs ELEVENLABS_API_KEY; voice id from brand.json or --voice-id
+ *   heygen      needs HEYGEN_API_KEY
+ *   elevenlabs  needs ELEVENLABS_API_KEY
  *   openai      needs OPENAI_API_KEY
+ *
+ * Pick a voice first — the default one is not Russian:
+ *   node voice.mjs --voices --provider=heygen --lang=ru
  *
  * Synthesized audio is cached in reels/.voice-cache/ keyed by the text, so
  * rebuilding a reel after a copy change only pays for the lines that changed.
@@ -116,6 +120,43 @@ const providers = {
     );
   },
 
+  /* HeyGen's audio-only endpoint: POST /v3/voices/speech returns a link to an
+     mp3 rather than the bytes, so the url is fetched in a second step. */
+  async heygen({ text, settings }) {
+    const key = process.env.HEYGEN_API_KEY;
+    if (!key) throw new Error('нет HEYGEN_API_KEY');
+    if (!settings.voiceId) {
+      throw new Error(
+        'не выбран голос HeyGen — посмотрите список: node voice.mjs --voices --provider=heygen --lang=ru'
+      );
+    }
+    const res = await fetch('https://api.heygen.com/v3/voices/speech', {
+      method: 'POST',
+      headers: { 'x-api-key': key, 'content-type': 'application/json' },
+      body: JSON.stringify({
+        voice_id: settings.voiceId,
+        text,
+        engine: settings.engine || 'starfish',
+        ...(settings.speed ? { speed: settings.speed } : {}),
+      }),
+    });
+    const body = await res.text();
+    if (!res.ok) throw new Error(`HeyGen ${res.status}: ${body.slice(0, 300)}`);
+    let json;
+    try {
+      json = JSON.parse(body);
+    } catch {
+      throw new Error(`HeyGen вернул не JSON: ${body.slice(0, 200)}`);
+    }
+    const url = json?.data?.audio_url || json?.audio_url || json?.data?.url;
+    if (!url) {
+      throw new Error(`в ответе HeyGen нет ссылки на аудио: ${body.slice(0, 300)}`);
+    }
+    const audio = await fetch(url);
+    if (!audio.ok) throw new Error(`не скачалось аудио HeyGen: ${audio.status}`);
+    return Buffer.from(await audio.arrayBuffer());
+  },
+
   async elevenlabs({ text, settings }) {
     const key = process.env.ELEVENLABS_API_KEY;
     if (!key) throw new Error('нет ELEVENLABS_API_KEY');
@@ -153,6 +194,56 @@ const providers = {
     return Buffer.from(await res.arrayBuffer());
   },
 };
+
+/* Voice catalogues, so a Russian voice can be picked without leaving the CLI. */
+const voiceLists = {
+  async heygen() {
+    const key = process.env.HEYGEN_API_KEY;
+    if (!key) throw new Error('нет HEYGEN_API_KEY');
+    const res = await fetch('https://api.heygen.com/v3/voices?engine=starfish', {
+      headers: { 'x-api-key': key },
+    });
+    if (!res.ok) throw new Error(`HeyGen ${res.status}: ${(await res.text()).slice(0, 200)}`);
+    const json = await res.json();
+    const items = json?.data?.voices || json?.voices || json?.data || [];
+    return items.map((v) => ({
+      id: v.voice_id || v.id,
+      name: v.name || v.display_name || '',
+      lang: v.language || v.locale || v.language_code || '',
+      gender: v.gender || '',
+    }));
+  },
+
+  async elevenlabs() {
+    const key = process.env.ELEVENLABS_API_KEY;
+    if (!key) throw new Error('нет ELEVENLABS_API_KEY');
+    const res = await fetch('https://api.elevenlabs.io/v1/voices', { headers: { 'xi-api-key': key } });
+    if (!res.ok) throw new Error(`ElevenLabs ${res.status}`);
+    const json = await res.json();
+    return (json.voices || []).map((v) => ({
+      id: v.voice_id,
+      name: v.name,
+      lang: (v.labels && (v.labels.language || v.labels.accent)) || '',
+      gender: (v.labels && v.labels.gender) || '',
+    }));
+  },
+};
+
+/** Print the provider's voices, optionally narrowed to one language. */
+export async function listVoices(providerName, lang) {
+  const load = voiceLists[providerName];
+  if (!load) throw new Error(`у провайдера ${providerName} нет списка голосов`);
+  let voices = await load();
+  if (lang) {
+    const needle = lang.toLowerCase();
+    const ru = needle.startsWith('ru');
+    voices = voices.filter((v) => {
+      const hay = `${v.lang} ${v.name}`.toLowerCase();
+      return hay.includes(needle) || (ru && (hay.includes('russian') || hay.includes('ru-ru')));
+    });
+  }
+  return voices;
+}
 
 /* ------------------------------------------------------------------- build */
 
@@ -247,43 +338,65 @@ export async function buildVoiceTrack({ projectName, project, duration, ffmpeg, 
 /* -------------------------------------------------------------------- cli  */
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const args = Object.fromEntries(
-    process.argv.slice(2).map((a) => {
-      const [k, v = true] = a.replace(/^--/, '').split('=');
-      return [k, v];
-    })
-  );
-  const names = args.project && args.project !== 'all'
-    ? String(args.project).split(',')
-    : fs.readdirSync(path.join(HERE, 'projects')).filter((f) => f.endsWith('.json')).map((f) => path.basename(f, '.json'));
+  // A missing key or a provider error is a message, not a stack trace.
+  try {
 
-  for (const projectName of names) {
-    const project = JSON.parse(
-      fs.readFileSync(path.join(HERE, 'projects', `${projectName}.json`), 'utf8')
+    const args = Object.fromEntries(
+      process.argv.slice(2).map((a) => {
+        const [k, v = true] = a.replace(/^--/, '').split('=');
+        return [k, v];
+      })
     );
-    const duration = (project.scenes || []).reduce((sum, s) => sum + (s.duration || 3), 0);
-    const lines = checkTiming(collectLines(project));
-    console.log(`\n${projectName} — ${lines.length} реплик, ${duration.toFixed(1)}s`);
-    for (const line of lines) {
-      const flag = line.tight ? '  ✗ не влезает' : '';
+    if (args.voices) {
+      const providerName = args.provider || process.env.VOICE_PROVIDER || 'heygen';
+      const voices = await listVoices(providerName, args.lang === true ? '' : args.lang);
+      if (!voices.length) {
+        console.log(`Голосов не нашлось (провайдер ${providerName}${args.lang ? `, язык ${args.lang}` : ''}).`);
+      }
+      for (const v of voices) {
+        console.log(`  ${String(v.id).padEnd(36)} ${v.name}  ${v.lang} ${v.gender}`.trimEnd());
+      }
       console.log(
-        `  ${String(line.at).padStart(6)}s  ~${line.need}s / ${line.room}s${flag}\n          ${line.text}`
+        `\nВыбранный id впишите в проект: "voiceSettings": { "provider": "${providerName}", "voiceId": "..." }`
       );
+      process.exit(0);
     }
-    if (lines.length) console.log(`  → ${path.relative(process.cwd(), writeScript(projectName, lines))}`);
-    if (args.check) continue;
 
-    const { createRequire } = await import('node:module');
-    const require = createRequire(import.meta.url);
-    let ffmpeg = process.env.FFMPEG_PATH || 'ffmpeg';
-    try { ffmpeg = require('ffmpeg-static') || ffmpeg; } catch {}
-    const built = await buildVoiceTrack({
-      projectName,
-      project,
-      duration,
-      ffmpeg,
-      provider: args.provider,
-    });
-    console.log(built ? `  → ${path.relative(process.cwd(), built.track)}` : '  нет реплик');
+    const names = args.project && args.project !== 'all'
+      ? String(args.project).split(',')
+      : fs.readdirSync(path.join(HERE, 'projects')).filter((f) => f.endsWith('.json')).map((f) => path.basename(f, '.json'));
+
+    for (const projectName of names) {
+      const project = JSON.parse(
+        fs.readFileSync(path.join(HERE, 'projects', `${projectName}.json`), 'utf8')
+      );
+      const duration = (project.scenes || []).reduce((sum, s) => sum + (s.duration || 3), 0);
+      const lines = checkTiming(collectLines(project));
+      console.log(`\n${projectName} — ${lines.length} реплик, ${duration.toFixed(1)}s`);
+      for (const line of lines) {
+        const flag = line.tight ? '  ✗ не влезает' : '';
+        console.log(
+          `  ${String(line.at).padStart(6)}s  ~${line.need}s / ${line.room}s${flag}\n          ${line.text}`
+        );
+      }
+      if (lines.length) console.log(`  → ${path.relative(process.cwd(), writeScript(projectName, lines))}`);
+      if (args.check) continue;
+
+      const { createRequire } = await import('node:module');
+      const require = createRequire(import.meta.url);
+      let ffmpeg = process.env.FFMPEG_PATH || 'ffmpeg';
+      try { ffmpeg = require('ffmpeg-static') || ffmpeg; } catch {}
+      const built = await buildVoiceTrack({
+        projectName,
+        project,
+        duration,
+        ffmpeg,
+        provider: args.provider,
+      });
+      console.log(built ? `  → ${path.relative(process.cwd(), built.track)}` : '  нет реплик');
+    }
+  } catch (err) {
+    console.error(`\n✗ ${err.message}`);
+    process.exit(1);
   }
 }
