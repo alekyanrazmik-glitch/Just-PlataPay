@@ -220,22 +220,62 @@ const providers = {
 };
 
 /* Voice catalogues, so a Russian voice can be picked without leaving the CLI. */
+
+/**
+ * Find the voices array wherever the provider chose to nest it. Guessing one
+ * path from documentation is how the first attempt came back empty; this walks
+ * the payload instead and takes the first array that looks like voices.
+ */
+function findVoiceArray(node, depth = 0) {
+  if (!node || depth > 5) return null;
+  if (Array.isArray(node)) {
+    return node.some((v) => v && typeof v === 'object' && (v.voice_id || v.id)) ? node : null;
+  }
+  if (typeof node === 'object') {
+    for (const value of Object.values(node)) {
+      const hit = findVoiceArray(value, depth + 1);
+      if (hit) return hit;
+    }
+  }
+  return null;
+}
+
 const voiceLists = {
   async heygen() {
     const key = process.env.HEYGEN_API_KEY;
     if (!key) throw new Error('нет HEYGEN_API_KEY');
-    const res = await fetch('https://api.heygen.com/v3/voices?engine=starfish', {
-      headers: { 'x-api-key': key },
-    });
-    if (!res.ok) throw new Error(`HeyGen ${res.status}: ${(await res.text()).slice(0, 200)}`);
-    const json = await res.json();
-    const items = json?.data?.voices || json?.voices || json?.data || [];
-    return items.map((v) => ({
-      id: v.voice_id || v.id,
-      name: v.name || v.display_name || '',
-      lang: v.language || v.locale || v.language_code || '',
-      gender: v.gender || '',
-    }));
+    const urls = [
+      'https://api.heygen.com/v3/voices?engine=starfish',
+      'https://api.heygen.com/v3/voices',
+      'https://api.heygen.com/v2/voices',
+    ];
+    const tried = [];
+    for (const url of urls) {
+      const res = await fetch(url, { headers: { 'x-api-key': key } });
+      const body = await res.text();
+      if (!res.ok) {
+        tried.push(`${url} → ${res.status} ${body.slice(0, 160)}`);
+        continue;
+      }
+      let json;
+      try {
+        json = JSON.parse(body);
+      } catch {
+        tried.push(`${url} → не JSON: ${body.slice(0, 160)}`);
+        continue;
+      }
+      const items = findVoiceArray(json);
+      if (items && items.length) {
+        return items.map((v) => ({
+          id: v.voice_id || v.id,
+          name: v.name || v.display_name || '',
+          lang: v.language || v.locale || v.language_code || v.lang || '',
+          gender: v.gender || '',
+        }));
+      }
+      tried.push(`${url} → голосов в ответе не нашлось; ключи верхнего уровня: ${Object.keys(json).join(', ')}; ответ: ${body.slice(0, 700)}`);
+    }
+    throw new Error(`HeyGen не отдал список голосов.\n  ${tried.join('\n  ')}`);
   },
 
   async elevenlabs() {
@@ -261,10 +301,16 @@ export async function listVoices(providerName, lang) {
   if (lang) {
     const needle = lang.toLowerCase();
     const ru = needle.startsWith('ru');
-    voices = voices.filter((v) => {
+    const narrowed = voices.filter((v) => {
       const hay = `${v.lang} ${v.name}`.toLowerCase();
-      return hay.includes(needle) || (ru && (hay.includes('russian') || hay.includes('ru-ru')));
+      return ru ? /russian|ru-ru|\bru\b/.test(hay) : hay.includes(needle);
     });
+    // Better to show everything than to report "no voices" over a bad filter.
+    if (!narrowed.length) {
+      console.log(`По языку «${lang}» ничего не совпало, показываю все ${voices.length}:`);
+    } else {
+      voices = narrowed;
+    }
   }
   return voices;
 }
