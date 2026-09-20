@@ -91,7 +91,7 @@ jobs:
           set -eo pipefail
           echo '### Русские голоса — ${{ inputs.provider }}' >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
-          node voice.mjs --voices --provider=${{ inputs.provider }} --lang=ru 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
+          VOICE_DEBUG=1 node voice.mjs --voices --provider=${{ inputs.provider }} --lang=ru 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
       - name: Собрать ролики

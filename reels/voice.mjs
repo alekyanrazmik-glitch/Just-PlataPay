@@ -226,6 +226,34 @@ const providers = {
  * path from documentation is how the first attempt came back empty; this walks
  * the payload instead and takes the first array that looks like voices.
  */
+/** Anything that looks like a "give me the next page" handle. */
+function findPageToken(node, depth = 0) {
+  if (!node || typeof node !== 'object' || depth > 3) return null;
+  for (const [k, v] of Object.entries(node)) {
+    if (typeof v === 'string' && v && /token|cursor/i.test(k) && !/^(id|voice)/i.test(k)) return v;
+    if (v && typeof v === 'object') {
+      const hit = findPageToken(v, depth + 1);
+      if (hit) return hit;
+    }
+  }
+  return null;
+}
+
+/** Non-array top-level fields, so an unfamiliar paging scheme is visible. */
+function describePaging(node) {
+  const out = [];
+  const walk = (obj, prefix, depth) => {
+    if (!obj || typeof obj !== 'object' || depth > 2) return;
+    for (const [k, v] of Object.entries(obj)) {
+      if (Array.isArray(v)) out.push(`${prefix}${k}[${v.length}]`);
+      else if (v && typeof v === 'object') walk(v, `${prefix}${k}.`, depth + 1);
+      else out.push(`${prefix}${k}=${String(v).slice(0, 40)}`);
+    }
+  };
+  walk(node, '', 0);
+  return out.join(' ');
+}
+
 function findVoiceArray(node, depth = 0) {
   if (!node || depth > 5) return null;
   if (Array.isArray(node)) {
@@ -244,36 +272,47 @@ const voiceLists = {
   async heygen() {
     const key = process.env.HEYGEN_API_KEY;
     if (!key) throw new Error('нет HEYGEN_API_KEY');
-    const urls = [
+    const bases = [
       'https://api.heygen.com/v3/voices?engine=starfish',
       'https://api.heygen.com/v3/voices',
       'https://api.heygen.com/v2/voices',
     ];
     const tried = [];
-    for (const url of urls) {
-      const res = await fetch(url, { headers: { 'x-api-key': key } });
-      const body = await res.text();
-      if (!res.ok) {
-        tried.push(`${url} → ${res.status} ${body.slice(0, 160)}`);
-        continue;
+    for (const base of bases) {
+      const all = [];
+      let url = `${base}&limit=100`.replace('?&', '?');
+      let hops = 0;
+      let shape = '';
+      while (url && hops < 40) {
+        const res = await fetch(url, { headers: { 'x-api-key': key } });
+        const body = await res.text();
+        if (!res.ok) {
+          tried.push(`${base} → ${res.status} ${body.slice(0, 160)}`);
+          break;
+        }
+        let json;
+        try {
+          json = JSON.parse(body);
+        } catch {
+          tried.push(`${base} → не JSON: ${body.slice(0, 160)}`);
+          break;
+        }
+        const page = findVoiceArray(json) || [];
+        all.push(...page);
+        if (!shape) shape = describePaging(json);
+        const token = findPageToken(json);
+        url = token ? `${base}&limit=100&token=${encodeURIComponent(token)}`.replace('?&', '?') : null;
+        hops += 1;
       }
-      let json;
-      try {
-        json = JSON.parse(body);
-      } catch {
-        tried.push(`${url} → не JSON: ${body.slice(0, 160)}`);
-        continue;
-      }
-      const items = findVoiceArray(json);
-      if (items && items.length) {
-        return items.map((v) => ({
+      if (all.length) {
+        if (process.env.VOICE_DEBUG) console.log(`[${base}] ${all.length} голосов, пагинация: ${shape}`);
+        return all.map((v) => ({
           id: v.voice_id || v.id,
           name: v.name || v.display_name || '',
           lang: v.language || v.locale || v.language_code || v.lang || '',
           gender: v.gender || '',
         }));
       }
-      tried.push(`${url} → голосов в ответе не нашлось; ключи верхнего уровня: ${Object.keys(json).join(', ')}; ответ: ${body.slice(0, 700)}`);
     }
     throw new Error(`HeyGen не отдал список голосов.\n  ${tried.join('\n  ')}`);
   },
